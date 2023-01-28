@@ -1,12 +1,12 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
 import './App.css'
 
 function App() {
  
   return (
     <div className="App">
-      
+        <h1 className="text-3xl bg-slate-300 font-bold underline">
+      Hello world!
+    </h1>
     </div>
   )
 }
