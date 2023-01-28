@@ -1,0 +1,7 @@
+.chatbox_container{
+    min-height: 500px;
+}
+.chatBox_messages_container{
+    min-height: 75%;
+    border: 2px solid rgb(185, 183, 183);
+}

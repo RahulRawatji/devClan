@@ -1,6 +1,10 @@
 import React from 'react'
-
+import { useNavigate } from 'react-router-dom'
 const Navbar = () => {
+    const navigator = useNavigate();
+    const loginHandler = () =>{
+        navigator('/login')
+    }
     return (
         <>
             <div className='flex justify-between pt-7 px-8 pb-4 border-b-2'>
@@ -11,8 +15,8 @@ const Navbar = () => {
                     <h1 className='ml-4 text-xl text-bold'>DevClan</h1>
                 </div>
                 <div className='flex gap-5'>
-                    <button className='px-4 py-2 rounded bold'  style={{'border': "3px solid #3700B3"}}>Login</button>
-                    <button className='px-4 py-2 rounded bold text-white' style={{'backgroundColor':"#3700B3"}}>Sign Up</button>
+                    <button className='px-4 py-2 rounded font-bold'  style={{'border': "3px solid"}} onClick={loginHandler}>Login</button>
+                    <button className='px-4 py-2 rounded font-bold text-white' style={{'backgroundColor':"#3700B3"}}>Sign Up</button>
                    
                 </div>
             </div>

@@ -1,0 +1,5 @@
+.chatContainer{
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    min-width: 60%;
+}

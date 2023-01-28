@@ -1,0 +1,4 @@
+.home_grid{
+    display: grid;
+    grid-template-columns: .7fr 2.5fr;
+}

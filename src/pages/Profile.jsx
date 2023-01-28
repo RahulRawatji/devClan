@@ -5,7 +5,6 @@ import HomeNav from "../components/HomeNav";
 const Profile = () => {
     return(
         <div>
-        <Header />
         <HomeNav />
         Profile page
         </div>
