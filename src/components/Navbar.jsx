@@ -1,14 +1,20 @@
 import React from 'react'
 import {auth} from '../utils/firebase';
 import {useAuthState} from 'react-firebase-hooks/auth';
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
+
 const Navbar = () => {
 
     const [user,loading] = useAuthState(auth);
-    console.log(user);
     const navigator = useNavigate();
+
     const loginHandler = () =>{
-        navigator('/login')
+        navigator('/')
+    };
+
+    const signUpHandler = () =>{
+        console.log('signUpp')
+        navigator('/register')
     }
 
     return (
@@ -24,11 +30,10 @@ const Navbar = () => {
                     !user && (
                         <div className='flex gap-5'>
                             <button className='px-4 py-2 rounded bold'  style={{'border': "3px solid #3700B3"}} onClick={loginHandler}>Login</button>
-                            <button className='px-4 py-2 rounded bold text-white' style={{'backgroundColor':"#3700B3"}}>Sign Up</button>
+                            <button className='px-4 py-2 rounded bold text-white' style={{'backgroundColor':"#3700B3"}} >Sign Up</button>
                         </div>
                     )
                 }
-                
             </div>
         </>
     )

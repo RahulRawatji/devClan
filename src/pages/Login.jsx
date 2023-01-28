@@ -1,5 +1,4 @@
 import React from 'react'
-import Navbar from '../components/Navbar'
 import GoogleIcon from '@mui/icons-material/Google';
 import {signInWithPopup, GoogleAuthProvider} from 'firebase/auth';
 import {auth} from '../utils/firebase';
@@ -15,12 +14,10 @@ const Login = () => {
   function login(){
     navigate("/home");
   }
-// const loginHandler=()=>{
-//   console.log("Login");
-// }
+
   const googleProvider = new GoogleAuthProvider();
   const GoogleLogin = async () => {
-    console.log("hii");
+    
     try {
       const result = await signInWithPopup(auth, googleProvider);
       login();

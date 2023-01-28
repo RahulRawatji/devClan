@@ -1,17 +1,11 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import Header from "../components/Header";
-import HomeNav from "../components/HomeNav";
-import Feed from "../components/Feed";
-import Navbar from "../components/Navbar";
-import Post from "../components/Post";
 import './Home.css';
 
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import SettingsSuggestRoundedIcon from '@mui/icons-material/SettingsSuggestRounded';
-import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 import {auth} from '../utils/firebase';
 import {useAuthState} from 'react-firebase-hooks/auth';
 
@@ -19,11 +13,16 @@ const Home = () => {
 
     const navigate = useNavigate();
     const [user,loading] = useAuthState(auth);
+
     function logOut(){
-        navigate("/login");
+        navigate("/");
       }
       if(loading) return;
       if(!user) return logOut();
+
+    const chatRouter = () =>{
+        navigate('/chat', {state:{user}});
+    }
 
     const Posts = [{'user':'Alex',"comment":{"there":"present"}}, {"user":'Pain',"comment":{"there":"present"}}, {"user":'thor'}]
     return (
@@ -42,7 +41,10 @@ const Home = () => {
             Profile</Button>
 
             <Button onClick={()=>auth.signOut()} variant="contained">Sign out</Button>
+            
+            <Button onClick={chatRouter} variant="contained">Chat</Button>
                     </Stack>
+
                 </div>
                 {/* <HomeNav /> */}
                 <div className="flex flex-col gap-2 p-16" style={{ minWidth: '70%' }}>

@@ -10,16 +10,18 @@ import Register from './pages/Register'
 function App() {
 
   return (
-  <>
-   <Navbar />
-    <Routes>
-      <Route path='/login' element={<Login/>} />
-      <Route path='/home' element={<Home/>} />
-      <Route path='/profile' element={<Profile/>} />
-      <Route path='/chat' element={<Chat/>}/>
-      <Route path='/register' element={<Register/>}/>
-    </Routes>
-  </>
+    <>
+      <Navbar />
+      <Routes>
+        <Route path="/">
+          <Route index element={<Login />} />
+          <Route path='home' element={<Home />} />
+          <Route path='profile' element={<Profile />} />
+          <Route path='chat' element={<Chat />} />
+          <Route path='register' element={<Register />} />
+        </Route>
+      </Routes>
+    </>
 
   )
 }

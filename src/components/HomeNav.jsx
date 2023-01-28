@@ -3,11 +3,11 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import SettingsSuggestRoundedIcon from '@mui/icons-material/SettingsSuggestRounded';
-import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
+
 import { useNavigate } from "react-router-dom";
 import {auth} from '../utils/firebase';
 import {useAuthState} from 'react-firebase-hooks/auth';
-import { useEffect, useState } from "react";
+
 const HomeNav = () => {
 
     const navigate = useNavigate();
@@ -28,7 +28,6 @@ const HomeNav = () => {
     //     getData();
     //   },[user,loading]);
 
-    console.log(user);
     return (
         <>
         <div style={{width: "25%",borderRight:"1px solid grey",position:"fixed",bottom:"0",height:"89vh"}}>
