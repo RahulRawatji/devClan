@@ -1,34 +1,75 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useId } from "react";
+import { useNavigate, Link} from "react-router-dom";
+import Header from "../components/Header";
+import HomeNav from "../components/HomeNav";
+import Feed from "../components/Feed";
+import Navbar from "../components/Navbar";
+import Post from "../components/Post";
+import Message from "../components/Message";
 import './Home.css';
 
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import SettingsSuggestRoundedIcon from '@mui/icons-material/SettingsSuggestRounded';
-import {auth} from '../utils/firebase';
+import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
+import {auth,db} from '../utils/firebase';
 import {useAuthState} from 'react-firebase-hooks/auth';
 import {useEffect,useState} from "react";
 import {addDoc,collection,serverTimestamp,onSnapshot, orderBy, query} from "firebase/firestore";
-import DeleteIcon from '@mui/icons-material/Delete';
 
 
 const Home = () => {
 
     const navigate = useNavigate();
     const [user,loading] = useAuthState(auth);
+    const [post, setPost] = useState({description:""});
+    const [allPosts, setAllPosts] = useState([]);
+
+    const getPosts = async () => {
+        const collectionRef = collection(db, "posts");
+        const q = query(collectionRef, orderBy("timestamp", "desc"));
+        const unsubscribe = onSnapshot(q, (snapshot) => {
+          setAllPosts(snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+        });
+        return unsubscribe;
+      };
+
+      useEffect(() => {
+        getPosts();
+      }, []);
 
     function logOut(){
-        navigate("/");
-      }
+        navigate("/login");
+    }
+
+    function login(){
+        navigate("/home");
+    }
       if(loading) return;
       if(!user) return logOut();
 
-    const chatRouter = () =>{
+      const chatRouter = () =>{
         navigate('/chat', {state:{user}});
     }
 
-    const Posts = [{'user':'Alex',"comment":{"there":"present"}}, {"user":'Pain',"comment":{"there":"present"}}, {"user":'thor'}]
+
+      const submitPost = async(e)=>{
+        e.preventDefault();
+        const collectionRef = collection(db,"posts");
+        await addDoc(collectionRef,{
+            ...post,
+            timestamp: serverTimestamp(),
+            user: user.uid,
+            avatar: user.photoURL,
+            username: user.displayName,
+
+        });
+        setPost({description: ""});
+        return login();
+      };
+
+    //const Posts = [{'user':'Alex',"comment":{"there":"present"}}, {"user":'Pain',"comment":{"there":"present"}}, {"user":'thor'}]
     return (
         <>
             <div className="home_grid">
@@ -39,34 +80,50 @@ const Home = () => {
                             Home</Button>
                         <Button variant="text" style={{ width: "50%" }}>
                             <SettingsSuggestRoundedIcon fontSize="large" style={{ paddingRight: "10px" }} />
-                            Settings</Button>
+                            Settings
+                        </Button>
                             <Button variant="text" style={{width:"50%"}} onClick={()=>navigate("/profile")}> 
-                         <img style={{border:"1px solid blue", borderRadius:"50%", width:"30px",marginRight:"10px"}} src={user.photoURL} />
-            Profile</Button>
+                                <img style={{border:"1px solid blue", borderRadius:"50%", width:"30px",marginRight:"10px"}} src={user.photoURL} />
+                                Profile
+                            </Button>
 
             <Button onClick={()=>auth.signOut()} variant="contained">Sign out</Button>
-            
             <Button onClick={chatRouter} variant="contained">Chat</Button>
                     </Stack>
-
                 </div>
                 {/* <HomeNav /> */}
                 <div className="flex flex-col gap-2 p-16" style={{ minWidth: '70%' }}>
-                    <div className="p-4 flex flex-col gap-3 rounded" style={{ border: '2px solid' }}>
-                        <div>
+                    <form onSubmit={submitPost} className="p-4 flex flex-col gap-3 rounded" style={{ border: '2px solid' }}>
+                        {/* <div>
                             <lable className="pr-4 font-bold text-xl">Title</lable>
                             <input className="w-full p-3 mt-3 border" placeholder="Enter Post Title"></input>
-                        </div>
+                        </div> */}
                         <div>
                             <lable className="font-bold pr-4 text-xl">Post</lable>
-                            <textarea className="w-full p-3 mt-3 h-20 border" placeholder="Enter Post"></textarea>
+                            <textarea value={post.description}  onChange={(e) => setPost({ ...post, description: e.target.value })} className="w-full p-3 mt-3 h-20 border " placeholder="Enter Post"></textarea>
                         </div>
                         <div>
-                            <button className="border text-white px-5 py-2" style={{ backgroundColor: '#3700B3' }}>Post</button>
+                            <button type="submit" className="border text-white px-5 py-2" style={{ backgroundColor: '#3700B3' }}>Post</button>
                         </div>
 
-                    </div>
-                    {Posts.map(post => {
+                    </form>
+
+                    <h2>Your Feed</h2>
+
+                    {allPosts.map((post) => (
+                        <Message key={post.id} {...post}>
+                            <a href={{ pathname: `/${post.id}`, query: { ...post } }}>
+                            <button>
+                                {post.comments?.length > 0 ? post.comments?.length : 0} comments
+                            </button>
+                            </a>
+                        </Message>
+                    ))}
+
+
+
+
+                    {/* {Posts.map(post => {
                         const { user , comment} = post;
                         return (
                                 <div className="flex  border rounded m-4">
@@ -91,7 +148,7 @@ const Home = () => {
                                     </div>
                                 </div>
                             )
-                    })}
+                    })} */}
                 </div>
                 <div>
 
