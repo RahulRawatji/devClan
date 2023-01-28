@@ -1,13 +1,49 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from 'react'
+import Navbar from '../components/Navbar'
+import GoogleIcon from '@mui/icons-material/Google';
+import {signInWithPopup, GoogleAuthProvider} from 'firebase/auth';
+import {auth} from '../utils/firebase';
+import {useNavigate} from "react-router-dom";
+import {useAuthState} from 'react-firebase-hooks/auth';
+import {useEffect} from "react";
+
 const Login = () => {
 
   const navigate = useNavigate();
-  const loginHandler = () =>{
-    navigate('/home')
+  const [user,loading] = useAuthState(auth);
+
+  function login(){
+    navigate("/home");
   }
+// const loginHandler=()=>{
+//   console.log("Login");
+// }
+  const googleProvider = new GoogleAuthProvider();
+  const GoogleLogin = async () => {
+    console.log("hii");
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      login();
+
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(()=>{
+    if(user)
+    {
+      login();
+    }
+    else{
+      console.log("login");
+    }
+  },[user]);
+
+
   return (
     <>
+      {/* <Navbar /> */}
       <div className='min-h-screen flex justify-center items-center -mt-24 '>
         <div className='grid grid-cols-2 p-32'>
           <div className='p-8 flex gap-5 flex-col justify-center'>
@@ -21,12 +57,17 @@ Let your followers book 1:1 sessions with you. </h1>
           <form className='flex flex-col gap-5'>
             <input className="p-3 border" placeholder='Enter Name'/>
             <input className="p-3 border" placeholder='Enter Name'/>
-            <button className='font-bold rounded bg-gray-800 p-4 text-white' onClick={loginHandler}>Sign-in</button>
+            <button className='font-bold rounded bg-gray-800 p-4 text-white'>Sign-in</button>
+            <p className='text-center'>or</p>
+            <button type='button' onClick={GoogleLogin} style={{padding:"5px",backgroundColor:"grey"}} >
+        Sign in with Google <GoogleIcon />
+      </button>
           </form>
         </div>
         </div>
         </div>
       </div>
+      
     </>
     
   )

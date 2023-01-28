@@ -5,11 +5,30 @@ import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import SettingsSuggestRoundedIcon from '@mui/icons-material/SettingsSuggestRounded';
 import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 import { useNavigate } from "react-router-dom";
-
+import {auth} from '../utils/firebase';
+import {useAuthState} from 'react-firebase-hooks/auth';
+import { useEffect, useState } from "react";
 const HomeNav = () => {
 
     const navigate = useNavigate();
+    const [user,loading] = useAuthState(auth);
+    function logOut(){
+        navigate("/login");
+      }
+      if(loading) return;
+      if(!user) return logOut();
+  
+    //   const getData = async () => {
+    //     if(loading) return;
+    //     if(!user) return logOut();
+    
+    //   };
 
+    //   useEffect (()=>{
+    //     getData();
+    //   },[user,loading]);
+
+    console.log(user);
     return (
         <>
         <div style={{width: "25%",borderRight:"1px solid grey",position:"fixed",bottom:"0",height:"89vh"}}>
@@ -21,8 +40,11 @@ const HomeNav = () => {
             <SettingsSuggestRoundedIcon fontSize="large" style={{paddingRight:"10px"}} />
             Settings</Button>
             <Button variant="text" style={{width:"50%"}} onClick={()=>navigate("/profile")}>
-            <AccountCircleRoundedIcon fontSize="large" style={{paddingRight:"10px"}}/>
+            {/* <AccountCircleRoundedIcon fontSize="large" style={{paddingRight:"10px"}}/> */}
+            <img style={{border:"1px solid blue", borderRadius:"50%", width:"30px",marginRight:"10px"}} src={user.photoURL} />
             Profile</Button>
+
+            <Button onClick={()=>auth.signOut()} variant="contained">Sign out</Button>
         </Stack>
         </div>
         </>

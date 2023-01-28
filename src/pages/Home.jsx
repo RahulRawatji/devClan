@@ -1,4 +1,10 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+import Header from "../components/Header";
+import HomeNav from "../components/HomeNav";
+import Feed from "../components/Feed";
+import Navbar from "../components/Navbar";
+import Post from "../components/Post";
 import './Home.css';
 
 import Button from '@mui/material/Button';
@@ -6,8 +12,18 @@ import Stack from '@mui/material/Stack';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import SettingsSuggestRoundedIcon from '@mui/icons-material/SettingsSuggestRounded';
 import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
+import {auth} from '../utils/firebase';
+import {useAuthState} from 'react-firebase-hooks/auth';
 
 const Home = () => {
+
+    const navigate = useNavigate();
+    const [user,loading] = useAuthState(auth);
+    function logOut(){
+        navigate("/login");
+      }
+      if(loading) return;
+      if(!user) return logOut();
 
     const Posts = [{'user':'Alex',"comment":{"there":"present"}}, {"user":'Pain',"comment":{"there":"present"}}, {"user":'thor'}]
     return (
@@ -21,11 +37,14 @@ const Home = () => {
                         <Button variant="text" style={{ width: "50%" }}>
                             <SettingsSuggestRoundedIcon fontSize="large" style={{ paddingRight: "10px" }} />
                             Settings</Button>
-                        <Button variant="text" style={{ width: "50%" }} onClick={() => navigate("/profile")}>
-                            <AccountCircleRoundedIcon fontSize="large" style={{ paddingRight: "10px" }} />
-                            Profile</Button>
+                            <Button variant="text" style={{width:"50%"}} onClick={()=>navigate("/profile")}> 
+                         <img style={{border:"1px solid blue", borderRadius:"50%", width:"30px",marginRight:"10px"}} src={user.photoURL} />
+            Profile</Button>
+
+            <Button onClick={()=>auth.signOut()} variant="contained">Sign out</Button>
                     </Stack>
                 </div>
+                {/* <HomeNav /> */}
                 <div className="flex flex-col gap-2 p-16" style={{ minWidth: '70%' }}>
                     <div className="p-4 flex flex-col gap-3 rounded" style={{ border: '2px solid' }}>
                         <div>
