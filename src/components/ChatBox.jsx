@@ -1,21 +1,23 @@
 import React, { useState, useEffect } from 'react';
+import {useLocation, useParams} from 'react-router-dom';
 
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth, db } from '../utils/firebase';
-import { collection, query, where, onSnapshot, doc,  orderBy, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, query, onSnapshot, orderBy, addDoc, serverTimestamp, where } from 'firebase/firestore';
 
 import './ChatBox.css';
 
 const ChatBox = () => {
   const [messageData, setMessageData] = useState();
   const [message, setMessage] = useState();
-
+  const search = useLocation().search;
+  const doubtId =new URLSearchParams(search).get("id");
+  
   const [user, loading] = useAuthState(auth);
-
 
   const getPost = async () => {
     const collectionRef = collection(db, 'messages');
-    const q = query(collectionRef, orderBy('createdAt', 'asc'));
+    const q = query(collectionRef,where('doubtId', '==', doubtId));
     const unsubscribe = onSnapshot(q, (snapshot) => {
       setMessageData(snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
     });
@@ -31,7 +33,6 @@ const ChatBox = () => {
   async function sendMessage(e) {
     e.preventDefault()
     const { uid, photoURL, displayName } = auth.currentUser;
-    console.log(auth.currentUser);
     const collectionRef = collection(db, 'messages');
 
     await addDoc(collectionRef, {
@@ -39,6 +40,7 @@ const ChatBox = () => {
       createdAt: serverTimestamp(),
       userId: uid,
       photoUrl: photoURL,
+      doubtId
     })
     setMessage('')
   }
@@ -55,9 +57,15 @@ const ChatBox = () => {
           const { text, userId, photoUrl } = msg;
           const msgUser = userId === uid ? 'sender' : 'receiver';
 
-          return (   
-            <h1 className='p-2 border-b-2 m-1 flex items-center' style={{ backgroundColor: msgUser == "sender" ? 'cyan' : 'orange', textAlign: msgUser == "sender" ? 'right' : 'left' }}> {msgUser == "receiver" ? <img  className='rounded-full m-2' style={{ border: "1px solid blue", width: "30px", marginRight: "10px"}} src={photoUrl} /> : ""}{text}</h1>
-    
+          return ( <div className='messages_container'>
+            <div>
+            {msgUser == "receiver" ? <img  className='rounded-full m-2' style={{ border: "1px solid blue", width: "30px"}} src={photoUrl} /> : ""}
+            </div>
+            <div>
+            <h1 style={{ textAlign: msgUser == "sender" ? 'right' : 'left' }}><span className='p-2 rounded mx-3' style={{backgroundColor:  msgUser == "sender" ? 'cyan' : 'orange'}}>{text}</span></h1>
+              </div>
+           
+            </div>
           )
         })}
       </div>

@@ -7,3 +7,10 @@
     display: flex;
     flex-direction: column;
 }
+
+.messages_container{
+    display: grid;
+    grid-template-columns: 1fr 9fr;
+    align-items: center;
+    margin: 10px;
+}
