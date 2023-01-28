@@ -112,20 +112,20 @@ const Home = () => {
                 </div>
 
                 <div className="flex flex-col gap-2 p-16" style={{ minWidth: '70%' }}>
-                    <form onSubmit={submitPost} className="p-4 flex flex-col gap-3 rounded" style={{ border: '2px solid' }}>
+                    <form onSubmit={submitPost} className="p-5 mb-3 flex flex-col gap-3 rounded" style={{"backgroundColor":"#F9F4F0"}}>
                         <div>
                             <lable className="font-bold pr-4 text-xl">Post</lable>
                             <textarea value={post.description} onChange={(e) => setPost({ ...post, description: e.target.value })} className="w-full p-3 mt-3 h-20 border" placeholder="Enter Post"></textarea>
                             <div className="flex gap-4">
-                                <label>Doubt</label>
+                                <label className="font-bold">Doubt</label>
                                 <input type='radio' name='doubt' value='doubt' onChange={(e) => setIsDoubt(e.target.value)} />
-                                <label>Post</label>
+                                <label className="font-bold">Post</label>
                                 <input type='radio' name='doubt' value='post' onChange={(e) => setIsDoubt(e.target.value)} />
                             </div>
 
                         </div>
                         <div>
-                            <button type="submit" className="border text-white px-5 py-2" style={{ backgroundColor: '#3700B3' }}>Submit</button>
+                        <Button type="submit" variant="contained">Submit</Button>
                         </div>
 
                     </form>
@@ -148,14 +148,15 @@ const Home = () => {
                     console.log(doubt);
                                 const { avatar, text,id } = doubt;
                                 return (
-                                    <div>
-                                        <div className="flex p-4">
-                                            <img className='rounded-full m-2' style={{ border: "1px solid blue", width: "30px" }} src={avatar} />
+                                    <div className="m-3 p-2 rounded" style={{backgroundColor:"#E8D2A6"}}>
+                                        <div className="flex p-4 items-center">
+                                            <img className='rounded-full m-1' style={{ width: "40px" }} src={avatar} />
                                             <h1>{text}</h1>
 
                                         </div>
-                                        <div className="p-5">
+                                        <div className="p-5 flex gap-3">
                                         <Button onClick={()=>chatRouter(id)} variant="contained">Chat</Button>
+                                        <Button href="https://meet.new" variant="outlined" color="success">Video</Button>
                                         </div>
                                     </div>
                                 )

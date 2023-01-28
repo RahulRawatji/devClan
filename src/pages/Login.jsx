@@ -56,7 +56,7 @@ Let your followers book 1:1 sessions with you. </h1>
             <input className="p-3 border" placeholder='Enter Name'/>
             <button className='font-bold rounded bg-gray-800 p-4 text-white'>Sign-in</button>
             <p className='text-center'>or</p>
-            <button type='button' onClick={GoogleLogin} style={{padding:"5px",backgroundColor:"grey"}} >
+            <button className='rounded p-2 text-white' type='button' onClick={GoogleLogin} style={{backgroundColor:"grey"}} >
         Sign in with Google <GoogleIcon />
       </button>
           </form>
