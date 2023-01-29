@@ -52,8 +52,8 @@ const Login = () => {
             <div className='flex flex-col login_container gap-5 border p-16 rounded' style={{ "backgroundColor": "#F9F4F0" }}>
               <h1 className='text-3xl font-bold'>Sign in</h1>
               <form className='flex flex-col gap-5'>
-                <input className="p-3 border" placeholder='Enter Name' />
-                <input className="p-3 border" placeholder='Enter Name' />
+                <input className="p-3 border" placeholder='Enter Email' />
+                <input className="p-3 border" placeholder='Enter Password' type="password" />
                 <button className='font-bold rounded bg-gray-800 p-4 text-white'>Sign-in</button>
                 <p className='text-center'>or</p>
                 <button className='rounded p-2 text-white' type='button' onClick={GoogleLogin} style={{ backgroundColor: "grey" }} >
