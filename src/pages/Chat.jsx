@@ -20,8 +20,8 @@ const Chat = () => {
 
 
     return (<>
-        <div className='min-h-screen flex justify-center items-center '>
-            <div className='-mt-32 gap-5  border chatContainer'>
+        <div className='min-h-screen flex justify-center items-center 'style={{"backgroundColor":"#F9F4F0"}}>
+            <div className='-mt-32 gap-5 chatContainer rounded' style={{"backgroundColor":"#EEEEEE"}}>
                 <ChatSideBar userData={userData} />
                 <ChatBox userData={userData} />
             </div>

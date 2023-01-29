@@ -1,4 +1,4 @@
-import React, { useId } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import Message from "../components/Message";
 import './Home.css';
@@ -112,7 +112,7 @@ const Home = () => {
                 </div>
 
                 <div className="flex flex-col gap-2 p-16" style={{ minWidth: '70%' }}>
-                    <form onSubmit={submitPost} className="p-5 mb-3 flex flex-col gap-3 rounded" style={{"backgroundColor":"#F9F4F0"}}>
+                    <form onSubmit={submitPost} className="p-5 mb-3 flex flex-col gap-3 rounded formContainer" style={{"backgroundColor":"#F9F4F0"}}>
                         <div>
                             <lable className="font-bold pr-4 text-xl">Post</lable>
                             <textarea value={post.description} onChange={(e) => setPost({ ...post, description: e.target.value })} className="w-full p-3 mt-3 h-20 border" placeholder="Enter Post"></textarea>
@@ -129,9 +129,10 @@ const Home = () => {
                         </div>
 
                     </form>
-                    <div className="grid grid-cols-2">
+                    <div className="grid grid-cols-2 content_Container">
                         <div className="border px-3 py-2">
-                            <h1 className="font-bold text-2xl">POSTS</h1>
+                            <h1 className="font-bold text-2xl px-3 py-2">POSTS</h1>
+                            <div className="doubtContainer">
                             {allPosts.map((post) => (
                                 <Message key={post.id} {...post}>
                                     <a href={{ pathname: `/${post.id}`, query: { ...post } }}>
@@ -141,11 +142,12 @@ const Home = () => {
                                     </a>
                                 </Message>
                             ))}
+                             </div>
                         </div>
                         <div className="border px-3 py-2">
-                            <h1 className="font-bold text-2xl">DOUBTS</h1>
+                            <h1 className="font-bold text-2xl px-3 py-2">DOUBTS</h1>
+                            <div className="doubtContainer">
                             {doubtsData?.map((doubt) => {
-                    console.log(doubt);
                                 const { avatar, text,id } = doubt;
                                 return (
                                     <div className="m-3 p-2 rounded" style={{backgroundColor:"#E8D2A6"}}>
@@ -161,6 +163,7 @@ const Home = () => {
                                     </div>
                                 )
                             })}
+                            </div>
                         </div>
 
                     </div>

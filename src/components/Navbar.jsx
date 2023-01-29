@@ -29,8 +29,8 @@ const Navbar = () => {
                 {
                     !user && (
                         <div className='flex gap-5'>
-                            <button className='px-4 py-2 rounded bold'  style={{'border': "3px solid #3700B3"}} onClick={loginHandler}>Login</button>
-                            <button className='px-4 py-2 rounded bold text-white' style={{'backgroundColor':"#3700B3"}} >Sign Up</button>
+                            <button className='px-4 py-2 rounded bold'  style={{'border': "3px solid grey"}} onClick={loginHandler}>Login</button>
+                            <button className='px-4 py-2 rounded bold text-white' style={{ backgroundColor: "grey" }}>Sign Up</button>
                         </div>
                     )
                 }
