@@ -7,11 +7,14 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import SettingsSuggestRoundedIcon from '@mui/icons-material/SettingsSuggestRounded';
-import { auth, db } from '../utils/firebase';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { useEffect, useState } from "react";
-import { addDoc, collection, serverTimestamp, onSnapshot, orderBy, query } from "firebase/firestore";
-
+import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
+import {auth,db} from '../utils/firebase';
+import {useAuthState} from 'react-firebase-hooks/auth';
+import {useEffect,useState} from "react";
+import {addDoc,collection,serverTimestamp,onSnapshot, orderBy, query,arrayUnion,
+    doc,
+    getDoc,
+    updateDoc,} from "firebase/firestore";
 
 const Home = () => {
 
@@ -32,9 +35,55 @@ const Home = () => {
         return unsubscribe;
     };
 
+    // const routeData = router.query;
+    const [message, setMessage] = useState("");
+    const [allMessage, setAllMessages] = useState([]);
+    function login(){
+        navigate("/home");
+  }
+  
+    //Submit a message
+    const submitMessage = async () => {
+      //Check if the user is logged
+      if (!auth.currentUser) return login();
+  
+      // if (!message) {
+      //   console.log(message);
+      //   toast.error("Don't leave an empty message 😅", {
+      //     position: toast.POSITION.TOP_CENTER,
+      //     autoClose: 1500,
+      //   });
+      //   return;
+      // }
+      const docRef = doc(db, "posts", post.id);
+      await updateDoc(docRef, {
+        comments: arrayUnion({
+          message,
+          avatar: auth.currentUser.photoURL,
+          userName: auth.currentUser.displayName,
+          time: Timestamp.now(),
+        }),
+      });
+      setMessage("");
+    };
+  
+    //Get Comments
+    const getComments = async () => {
+      const docRef = doc(db, "posts", routeData.id);
+      const unsubscribe = onSnapshot(docRef, (snapshot) => {
+        setAllMessages(snapshot.data().comments);
+      });
+      return unsubscribe;
+    };
+  
+    useEffect(() => {
+      if (!navigate.isReady) return;
+      getComments();
+    }, [navigate.isReady]);                 
+
     const getPosts = async () => {
-        const collectionRef = collection(db, "posts");
-        const q = query(collectionRef, orderBy("timestamp", "desc"));
+        const collectionRef = collection(db, 'posts');
+        const q = query(collectionRef, orderBy('timestamp', 'desc'));
         const unsubscribe = onSnapshot(q, (snapshot) => {
             setAllPosts(snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
         });
@@ -46,18 +95,19 @@ const Home = () => {
         getDoubts();
     }, []);
 
-    function logOut() {
+    function logOut(){
         navigate("/");
     }
 
-    function login() {
-        navigate("/home");
-    }
-    if (loading) return;
-    if (!user) return logOut();
+      if(loading) return;
+      if(!user) return logOut();
 
     const chatRouter = (id) => {
         navigate(`/chat?id=${id}`);
+    }
+
+    const commentRouter = (id) => {
+        navigate(`/comment?id=${id}`);
     }
 
     const submitPost = async (e) => {
@@ -87,7 +137,8 @@ const Home = () => {
 
         setPost({ description: "" });
         return login();
-    };
+      };
+      console.log(allPosts.id);
 
     return (
         <>
@@ -135,11 +186,10 @@ const Home = () => {
                             <div className="doubtContainer">
                             {allPosts.map((post) => (
                                 <Message key={post.id} {...post}>
-                                    <a href={{ pathname: `/${post.id}`, query: { ...post } }}>
-                                        <button>
-                                            {post.comments?.length > 0 ? post.comments?.length : 0} comments
-                                        </button>
-                                    </a>
+                                    <div className="p-5">
+                                    ( {post.comments?.length > 0 ? post.comments?.length : 0} comments )
+                                        <Button onClick={()=>commentRouter(post.id)} variant="contained" style={{marginLeft:"5px"}}>Comment</Button>
+                                    </div>
                                 </Message>
                             ))}
                              </div>

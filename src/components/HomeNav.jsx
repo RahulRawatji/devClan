@@ -13,7 +13,7 @@ const HomeNav = () => {
     const navigate = useNavigate();
     const [user,loading] = useAuthState(auth);
     function logOut(){
-        navigate("/login");
+        navigate("/");
       }
       if(loading) return;
       if(!user) return logOut();

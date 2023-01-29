@@ -6,6 +6,7 @@ import Home from './pages/Home'
 import Profile from './pages/Profile'
 import Chat from './pages/Chat'
 import Register from './pages/Register'
+import Comment from './pages/Comment'
 
 function App() {
 
@@ -18,6 +19,7 @@ function App() {
           <Route path='home' element={<Home />} />
           <Route path='profile' element={<Profile />} />
           <Route path='chat' element={<Chat />} />
+          <Route path='comment' element={<Comment />} />
           <Route path='register' element={<Register />} />
         </Route>
       </Routes>
