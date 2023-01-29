@@ -198,12 +198,16 @@ const Home = () => {
                             <h1 className="font-bold text-2xl px-3 py-2">DOUBTS</h1>
                             <div className="doubtContainer">
                             {doubtsData?.map((doubt) => {
-                                const { avatar, text,id } = doubt;
+                                const { avatar, text,id, username} = doubt;
+                                console.log(doubt);
                                 return (
                                     <div className="m-3 p-2 rounded" style={{backgroundColor:"#E8D2A6"}}>
-                                        <div className="flex p-4 items-center">
+                                        <div className="p-4 ">
+                                            <div className="flex items-center">
                                             <img className='rounded-full m-1' style={{ width: "40px" }} src={avatar} />
-                                            <h1>{text}</h1>
+                                            <h1>{username}</h1>
+                                            </div>
+                                            <h1 className="ml-3 p-3">{text}</h1>
 
                                         </div>
                                         <div className="p-5 flex gap-3">
